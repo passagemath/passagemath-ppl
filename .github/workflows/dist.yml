@@ -43,7 +43,7 @@ jobs:
             arch: aarch64
           - os: macos-15-intel
             arch: auto
-          - os: macos-14
+          - os: macos-15
             arch: auto
     env:
       # SPKGs to install as system packages
@@ -55,7 +55,7 @@ jobs:
       #
       CIBW_ARCHS: ${{ matrix.arch }}
       # https://cibuildwheel.readthedocs.io/en/stable/options/#requires-python
-      CIBW_PROJECT_REQUIRES_PYTHON: ">=3.9"
+      CIBW_PROJECT_REQUIRES_PYTHON: ">=3.11"
       # Environment during wheel build
       CIBW_ENVIRONMENT: "PATH=$(pwd)/local/bin:$PATH CPATH=$(pwd)/local/include:$CPATH LIBRARY_PATH=$(pwd)/local/lib:$LIBRARY_PATH LD_LIBRARY_PATH=$(pwd)/local/lib:$LD_LIBRARY_PATH PKG_CONFIG_PATH=$(pwd)/local/share/pkgconfig:$PKG_CONFIG_PATH ACLOCAL_PATH=/usr/share/aclocal"
       # Use 'build', not 'pip wheel'
@@ -132,7 +132,7 @@ jobs:
           mkdir -p unpacked
           for pkg in passagemath_ppl; do
               (cd unpacked && tar xfz - ) < dist/$pkg*.tar.gz
-              "${{ steps.python.outputs.python-path }}" -m pipx run cibuildwheel==3.2.1 unpacked/$pkg*
+              "${{ steps.python.outputs.python-path }}" -m pipx run cibuildwheel==4.3.1 unpacked/$pkg*
           done
 
       - uses: actions/upload-artifact@v4
@@ -319,7 +319,7 @@ jobs:
 
       - name: passagemath-ppl wheels
         id:   passagemath-ppl
-        uses: pypa/cibuildwheel@v2.23.0
+        uses: pypa/cibuildwheel@v4.3.1
         with:
           package-dir: unpacked/passagemath_ppl
 
